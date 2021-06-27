@@ -18,6 +18,7 @@ import { User } from 'src/user/entities/user.entity';
           database: configService.get('DB_DATABASE'),
           entities: [User],
           synchronize: __dev__,
+          //logging: __dev__,
         };
       },
     }),
