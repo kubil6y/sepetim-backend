@@ -1,11 +1,13 @@
 import Joi from 'joi';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonModule } from './common/common.module';
 import { __dev__, __prod__ } from './common/constants';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AppResolver } from './app.resolver';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -24,19 +26,13 @@ import { AppResolver } from './app.resolver';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_DATABASE: Joi.string().required(),
+        JWT_SECRET_KEY: Joi.string().required(),
       }),
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [],
-      synchronize: __dev__,
-    }),
+    DatabaseModule,
     CommonModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [AppResolver],
