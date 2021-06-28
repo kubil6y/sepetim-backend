@@ -20,8 +20,8 @@ export class VerificationService {
 
       if (!verification) return f('Invalid Code');
 
+      // updating user verification status && update promise
       verification.user.verified = true;
-      // user verification status update promise
       const p1 = this.userRepository.save(verification.user);
       // removing verification promise
       const p2 = this.verificationRepository.remove(verification);

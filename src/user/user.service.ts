@@ -4,12 +4,17 @@ import {
   UserOutput,
   LoginOutput,
   LoginInput,
+  GetAllUsersInput,
+  GetAllUsersOutput,
+  EditUserProfileOutput,
+  EditUserProfileInput,
 } from './dtos';
 import { Injectable } from '@nestjs/common';
 import { f, notFound } from 'src/common/errors';
 import { UserRepository } from './repositories/user.repository';
 import { JwtService } from 'src/jwt/jwt.service';
 import { VerificationRepository } from './repositories/verification.repository';
+import { SendGridService } from '@anchan828/nest-sendgrid';
 
 @Injectable()
 export class UserService {
@@ -17,6 +22,7 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly verificationRepository: VerificationRepository,
     private readonly jwtService: JwtService,
+    private readonly mailService: SendGridService,
   ) {}
 
   async findUserById(id: number): Promise<UserOutput> {
@@ -43,9 +49,16 @@ export class UserService {
         this.userRepository.create(createUserInput),
       );
 
-      await this.verificationRepository.save(
+      const verification = await this.verificationRepository.save(
         this.verificationRepository.create({ user }),
       );
+
+      await this.mailService.send({
+        to: user.email,
+        from: 'lieqb2@gmail.com',
+        subject: '[Sepetim] Account Activation Code',
+        text: `Activation code: ${verification.code}`,
+      });
 
       return { ok: true, user };
     } catch (error) {
@@ -58,9 +71,7 @@ export class UserService {
       const { ok, error, user } =
         await this.userRepository.findUserByCredentials(loginInput);
 
-      if (error) {
-        return f(error);
-      }
+      if (error) return f(error);
 
       if (ok) {
         const token = this.jwtService.sign({
@@ -70,6 +81,47 @@ export class UserService {
       }
     } catch (error) {
       return f('Could not login user');
+    }
+  }
+
+  async getAllUsers({ page }: GetAllUsersInput): Promise<GetAllUsersOutput> {
+    try {
+      const { meta, results } = await this.userRepository.paginate({
+        ...(page && { page }),
+        take: 20,
+      });
+
+      return { ok: true, meta, results };
+    } catch (error) {
+      return f('Could not load users');
+    }
+  }
+
+  async editUserProfile(
+    userId: number,
+    { email, password, address, firstName, lastName }: EditUserProfileInput,
+  ): Promise<EditUserProfileOutput> {
+    try {
+      const user = await this.userRepository.findOne(userId);
+      if (!user) return notFound('user');
+
+      if (email) {
+        user.verified = false;
+        user.email = email;
+        await this.verificationRepository.delete({ user: { id: user.id } });
+        await this.verificationRepository.save(
+          this.verificationRepository.create({ user }),
+        );
+      }
+      if (password) user.password = password;
+      if (firstName) user.firstName = firstName;
+      if (lastName) user.lastName = lastName;
+      if (address) user.address = address;
+
+      await this.userRepository.save(user);
+      return { ok: true };
+    } catch (error) {
+      return f('Could not update profile');
     }
   }
 }

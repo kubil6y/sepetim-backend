@@ -1,11 +1,11 @@
-import argon2 from 'argon2';
 import {
   Field,
   InputType,
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import argon2 from 'argon2';
+import { IsEmail, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 
@@ -38,7 +38,6 @@ export class User extends CoreEntity {
 
   @Field(() => String)
   @Column()
-  @IsString()
   address: string;
 
   @Field(() => String)

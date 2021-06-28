@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { __dev__ } from 'src/common/constants';
-import { Address } from 'src/user/entities/address.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Verification } from 'src/user/entities/verification.entity';
 
@@ -18,7 +17,7 @@ import { Verification } from 'src/user/entities/verification.entity';
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
-          entities: [User, Address, Verification],
+          entities: [User, Verification],
           synchronize: __dev__,
           //logging: __dev__,
         };
