@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from 'src/jwt/jwt.service';
+import { UserRole } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { AllowedRoles, METADATAKEY_ROLES } from './role.decorator';
 
@@ -43,6 +44,7 @@ export class AuthGuard implements CanActivate {
           );
           if (ok && user) {
             if (roles.includes('All')) return true; // any logged in user
+            if (user.role === UserRole.Admin) return true; // Admin has all the access
             return roles.includes(user.role); // only certain users
           }
         }

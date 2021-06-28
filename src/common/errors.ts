@@ -1,6 +1,6 @@
 import { capitalize } from './helpers';
 
-type NotFoundField = 'user' | 'restaurant' | 'category';
+type NotFoundField = 'user' | 'restaurant' | 'verification';
 
 export const notFound = (field: NotFoundField) => ({
   ok: false,

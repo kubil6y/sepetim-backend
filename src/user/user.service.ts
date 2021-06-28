@@ -9,11 +9,13 @@ import { Injectable } from '@nestjs/common';
 import { f, notFound } from 'src/common/errors';
 import { UserRepository } from './repositories/user.repository';
 import { JwtService } from 'src/jwt/jwt.service';
+import { VerificationRepository } from './repositories/verification.repository';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly verificationRepository: VerificationRepository,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -40,6 +42,11 @@ export class UserService {
       const user = await this.userRepository.save(
         this.userRepository.create(createUserInput),
       );
+
+      await this.verificationRepository.save(
+        this.verificationRepository.create({ user }),
+      );
+
       return { ok: true, user };
     } catch (error) {
       return f('Could not create user');

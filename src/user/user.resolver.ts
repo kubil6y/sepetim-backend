@@ -15,7 +15,7 @@ import { Role } from 'src/auth/role.decorator';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Role('All')
+  @Role('Admin')
   @Query(() => String)
   hello() {
     return 'merhaba mesaji';
