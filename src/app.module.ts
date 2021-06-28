@@ -4,22 +4,27 @@ import { ConfigModule } from '@nestjs/config';
 import { CommonModule } from './common/common.module';
 import { TOKEN_KEY, __dev__, __prod__ } from './common/constants';
 import { GraphQLModule } from '@nestjs/graphql';
-import { AppResolver } from './app.resolver';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DatabaseModule } from './database/database.module';
 import { JwtModule } from './jwt/jwt.module';
+import { GraphQLError, GraphQLFormattedError } from 'graphql';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
       playground: __dev__,
+      context: ({ req }) => ({
+        token: req.headers[TOKEN_KEY],
+      }),
       autoSchemaFile: true,
-      //context: ({ req }) => {
-      //return {
-      //...(req && { token: req.headers(TOKEN_KEY) }),
-      //};
-      //},
+      formatError: (error: GraphQLError) => {
+        const graphQLFormattedError: GraphQLFormattedError = {
+          message:
+            error?.extensions?.exception?.response?.message || error?.message,
+        };
+        return graphQLFormattedError;
+      },
     }),
     ConfigModule.forRoot({
       isGlobal: true,
@@ -42,6 +47,6 @@ import { JwtModule } from './jwt/jwt.module';
     JwtModule,
   ],
   controllers: [],
-  providers: [AppResolver],
+  providers: [],
 })
 export class AppModule {}

@@ -31,7 +31,7 @@ export class UserRepository extends CoreRepository<User> {
 
       return { ok: true, user };
     } catch (error) {
-      return f('Could not load user');
+      return f('Could not find user');
     }
   }
 }

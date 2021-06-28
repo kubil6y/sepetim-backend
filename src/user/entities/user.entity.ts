@@ -10,9 +10,9 @@ import { CoreEntity } from 'src/common/core.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 
 export enum UserRole {
-  ADMIN = 'ADMIN',
-  OWNER = 'OWNER',
-  CLIENT = 'CLIENT',
+  Admin = 'Admin',
+  Owner = 'Owner',
+  Client = 'Client',
 }
 
 registerEnumType(UserRole, { name: 'UserRoleEnum' });
@@ -38,6 +38,11 @@ export class User extends CoreEntity {
 
   @Field()
   @Column()
+  @IsString()
+  address: string;
+
+  @Field()
+  @Column({ unique: true })
   @IsEmail()
   email: string;
 
@@ -46,9 +51,9 @@ export class User extends CoreEntity {
   @IsString()
   password: string;
 
-  @Field(() => UserRole, { nullable: true })
-  @Column({ enum: UserRole, default: UserRole.CLIENT })
-  role?: UserRole;
+  @Field(() => UserRole, { nullable: true, defaultValue: UserRole.Client })
+  @Column({ enum: UserRole, default: UserRole.Client })
+  role: UserRole;
 
   @BeforeInsert()
   @BeforeUpdate()
