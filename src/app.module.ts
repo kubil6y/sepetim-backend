@@ -10,6 +10,8 @@ import { DatabaseModule } from './database/database.module';
 import { JwtModule } from './jwt/jwt.module';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
+import { RestaurantModule } from './restaurant/restaurant.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -50,6 +52,8 @@ import { SendGridModule } from '@anchan828/nest-sendgrid';
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_API_KEY,
     }),
+    RestaurantModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [],

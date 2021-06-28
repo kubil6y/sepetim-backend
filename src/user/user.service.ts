@@ -53,12 +53,13 @@ export class UserService {
         this.verificationRepository.create({ user }),
       );
 
-      await this.mailService.send({
-        to: user.email,
-        from: 'lieqb2@gmail.com',
-        subject: '[Sepetim] Account Activation Code',
-        text: `Activation code: ${verification.code}`,
-      });
+      // TODO activate later
+      //await this.mailService.send({
+      //to: user.email,
+      //from: 'lieqb2@gmail.com',
+      //subject: '[Sepetim] Account Activation Code',
+      //text: `Activation code: ${verification.code}`,
+      //});
 
       return { ok: true, user };
     } catch (error) {
@@ -88,7 +89,7 @@ export class UserService {
     try {
       const { meta, results } = await this.userRepository.paginate({
         ...(page && { page }),
-        take: 20,
+        take: 10,
       });
 
       return { ok: true, meta, results };

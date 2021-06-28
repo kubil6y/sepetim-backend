@@ -1,0 +1,12 @@
+### TOKENS ###
+# ADMIN
+{
+ "x-jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjI0OTE1NjE5fQ.78fK4Ao9Z2rL3dllyt8e9g4b9AsClM2uVQV7PJTI8Qk"
+}
+
+# CLIENT
+{
+  "x-jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjI0ODg1MzQyfQ.tUUCtleWriNJtRAWec2_8U4_ESc0AOhS4g4MD4x2Xms"
+}
+
+#----------------------------------------#

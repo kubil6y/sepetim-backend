@@ -7,12 +7,13 @@ import {
 import argon2 from 'argon2';
 import { IsEmail, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { Rating } from 'src/order/entities/rating.entity';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 
 export enum UserRole {
   Admin = 'Admin',
-  Owner = 'Owner',
   Client = 'Client',
+  //Owner = 'Owner',
 }
 
 registerEnumType(UserRole, { name: 'UserRoleEnum' });
@@ -57,6 +58,9 @@ export class User extends CoreEntity {
   @Field(() => UserRole, { nullable: true, defaultValue: UserRole.Client })
   @Column({ enum: UserRole, default: UserRole.Client })
   role: UserRole;
+
+  //@OneToMany(() => Rating, (rating) => rating.user)
+  //ratings: Rating[];
 
   @BeforeInsert()
   @BeforeUpdate()

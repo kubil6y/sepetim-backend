@@ -2,6 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { __dev__ } from 'src/common/constants';
+import { Order } from 'src/order/entities/order.entity';
+import { Rating } from 'src/order/entities/rating.entity';
+import { Category } from 'src/restaurant/entities/category.entity';
+import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Verification } from 'src/user/entities/verification.entity';
 
@@ -17,7 +21,7 @@ import { Verification } from 'src/user/entities/verification.entity';
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
-          entities: [User, Verification],
+          entities: [User, Verification, Restaurant, Category, Rating, Order],
           synchronize: __dev__,
           //logging: __dev__,
         };
