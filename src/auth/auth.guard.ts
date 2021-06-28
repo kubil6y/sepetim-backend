@@ -5,6 +5,16 @@ import { JwtService } from 'src/jwt/jwt.service';
 import { UserService } from 'src/user/user.service';
 import { AllowedRoles, METADATAKEY_ROLES } from './role.decorator';
 
+/*
+// Auth + Role flow
+1. there are no middlewares.
+2. For every request context function (in app.module) runs. 
+3. Whatever context function returns gets added to context.
+4. AuthGuard is global, so after context the guard runs.
+5. This guard combines, roles and auth in one.
+*/
+
+// This is a global guard. thanks to  APP_GUARD in auth.module.ts
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -19,8 +29,8 @@ export class AuthGuard implements CanActivate {
         context.getHandler(),
       );
 
-      if (!roles || roles.length === 0) return false;
-      if (roles.includes('Public')) return true;
+      if (!roles || roles.length === 0) return false; // all endpoints must have @Role() decorator
+      if (roles.includes('Public')) return true; // public endpoints
 
       const gqlContext = GqlExecutionContext.create(context).getContext();
       const token = gqlContext.token;
@@ -32,8 +42,8 @@ export class AuthGuard implements CanActivate {
             decoded['id'],
           );
           if (ok && user) {
-            if (roles.includes('All')) return true;
-            return roles.includes(user.role);
+            if (roles.includes('All')) return true; // any logged in user
+            return roles.includes(user.role); // only certain users
           }
         }
       }
