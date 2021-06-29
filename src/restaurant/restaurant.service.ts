@@ -65,10 +65,12 @@ export class ResturantService {
     restaurantId,
   }: GetRestaurantInput): Promise<GetRestaurantOutput> {
     try {
+      // TODO menu.options delete this afterwards, we will get menu, then use will click on dish to get its details.
       const restaurant = await this.restaurantRepository.findOne(restaurantId, {
-        relations: ['category', 'menu'],
+        relations: ['category', 'menu', 'menu.options'],
       });
       if (!restaurant) return notFound('restaurant');
+      console.log(restaurant);
 
       return { ok: true, restaurant };
     } catch (error) {

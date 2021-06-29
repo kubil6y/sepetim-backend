@@ -5,7 +5,8 @@ type NotFoundField =
   | 'restaurant'
   | 'verification'
   | 'category'
-  | 'dish';
+  | 'dish'
+  | 'dish option';
 
 export const notFound = (field: NotFoundField) => ({
   ok: false,
