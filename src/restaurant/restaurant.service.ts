@@ -9,8 +9,6 @@ import {
   GetAllRestaurantsOutput,
   GetRestaurantInput,
   GetRestaurantOutput,
-  RestaurantsByCategoryInput,
-  RestaurantsByCategoryOutput,
   SearchRestaurantInput,
   SearchRestaurantOutput,
 } from './dtos';
@@ -36,6 +34,7 @@ export class ResturantService {
         where: {
           name: ILike(`${query}%`),
         },
+        relations: ['category'],
       });
 
       return { ok: true, restaurants };
@@ -137,26 +136,6 @@ export class ResturantService {
       return { ok: true };
     } catch (error) {
       return f('Could not delete restaurant');
-    }
-  }
-
-  async restaurantsByCategory({
-    categoryName,
-  }: RestaurantsByCategoryInput): Promise<RestaurantsByCategoryOutput> {
-    try {
-      const category = await this.categoryRepository.findOne({
-        name: categoryName.toLowerCase(),
-      });
-      if (!category) return notFound('category');
-
-      const { meta, results } = await this.restaurantRepository.paginate({
-        where: { category },
-        take: 10,
-      });
-
-      return { ok: true, meta, results };
-    } catch (error) {
-      return f('Could not load restaurants');
     }
   }
 }

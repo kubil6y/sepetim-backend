@@ -9,8 +9,6 @@ import {
   GetAllRestaurantsOutput,
   GetRestaurantInput,
   GetRestaurantOutput,
-  RestaurantsByCategoryInput,
-  RestaurantsByCategoryOutput,
   SearchRestaurantInput,
   SearchRestaurantOutput,
 } from './dtos';
@@ -21,16 +19,6 @@ import { Role } from 'src/auth/role.decorator';
 @Resolver()
 export class ResturantResolver {
   constructor(private readonly resturantService: ResturantService) {}
-
-  @Role('Public')
-  @Query(() => RestaurantsByCategoryOutput)
-  restaurantsByCategory(
-    @Args('input') restaurantsByCategoryInput: RestaurantsByCategoryInput,
-  ): Promise<RestaurantsByCategoryOutput> {
-    return this.resturantService.restaurantsByCategory(
-      restaurantsByCategoryInput,
-    );
-  }
 
   @Role('Public')
   @Query(() => SearchRestaurantOutput)
