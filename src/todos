@@ -6,3 +6,12 @@ category module
 
 order module
 rating module
+
+get only healthy dishes... (regardless of restaurants) #nice challenge.
+
+
+# TODO add slugify 
+restaurant.entity
+category.entity
+
+# TODO dish ingredients

@@ -12,6 +12,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { OrderModule } from './order/order.module';
+import { DishModule } from './dish/dish.module';
 
 @Module({
   imports: [
@@ -48,12 +49,13 @@ import { OrderModule } from './order/order.module';
     CommonModule,
     AuthModule,
     UserModule,
+    RestaurantModule,
+    DishModule,
+    OrderModule,
     JwtModule,
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_API_KEY,
     }),
-    RestaurantModule,
-    OrderModule,
   ],
   controllers: [],
   providers: [],

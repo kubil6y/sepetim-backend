@@ -66,7 +66,7 @@ export class ResturantService {
   }: GetRestaurantInput): Promise<GetRestaurantOutput> {
     try {
       const restaurant = await this.restaurantRepository.findOne(restaurantId, {
-        relations: ['category'],
+        relations: ['category', 'menu'],
       });
       if (!restaurant) return notFound('restaurant');
 

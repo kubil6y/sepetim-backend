@@ -1,7 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsOptional, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { slugify } from 'src/common/helpers';
+import { Dish } from 'src/dish/entities/dish.entity';
+import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Category } from './category.entity';
 
 @InputType('RestaurantInputType', { isAbstract: true })
@@ -36,4 +38,17 @@ export class Restaurant extends CoreEntity {
     onDelete: 'SET NULL',
   })
   category?: Category;
+
+  @Field(() => [Dish])
+  @OneToMany(() => Dish, (dish) => dish.restaurant)
+  menu: Dish[];
+
+  //@Field(() => String)
+  //@Column()
+  //slug: string;
+
+  //@BeforeInsert()
+  //generateSlug(): void {
+  //this.slug = slugify(this.name);
+  //}
 }
