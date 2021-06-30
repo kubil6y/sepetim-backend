@@ -1,9 +1,23 @@
-import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { Min } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
 import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
 import { Column, Entity, ManyToOne, OneToMany, RelationId } from 'typeorm';
 import { DishOption } from './dish-option.entity';
+
+enum DishType {
+  Food = 'Food',
+  Beverage = 'Beverage',
+  Dessert = 'Dessert',
+}
+
+registerEnumType(DishType, { name: 'DishTypeEnum' });
 
 @InputType('DishInputType', { isAbstract: true })
 @ObjectType()
@@ -31,4 +45,8 @@ export class Dish extends CoreEntity {
 
   @RelationId((dish: Dish) => dish.restaurant)
   restaurantId: number;
+
+  @Field(() => DishType, { nullable: true, defaultValue: DishType.Food })
+  @Column({ enum: DishType, default: DishType.Food })
+  dishType: DishType;
 }

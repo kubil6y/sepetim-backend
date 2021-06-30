@@ -1,4 +1,5 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Min } from 'class-validator';
 import { CoreOutput } from 'src/common/core.output';
 
 @InputType('CreateOrderItemInputType')
@@ -9,6 +10,10 @@ export class CreateOrderItemInput {
 
   @Field(() => Int)
   dishOptionId?: number;
+
+  @Field(() => Int)
+  @Min(1)
+  quantity: number;
 }
 
 @InputType()

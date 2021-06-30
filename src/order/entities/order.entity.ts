@@ -18,11 +18,13 @@ import { OrderItem } from './order-item.entity';
 @Entity('orders')
 export class Order extends CoreEntity {
   @Field(() => Restaurant)
-  @ManyToOne(() => Restaurant, (restaurant) => restaurant.orders)
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.orders, {
+    onDelete: 'CASCADE',
+  })
   restaurant: Restaurant;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.orders)
+  @ManyToOne(() => User, (user) => user.orders, { onDelete: 'CASCADE' })
   client: User;
 
   @RelationId((order: Order) => order.client)

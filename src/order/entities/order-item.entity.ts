@@ -1,4 +1,5 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Min } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
 import { DishOption } from 'src/dish/entities/dish-option.entity';
 import { Dish } from 'src/dish/entities/dish.entity';
@@ -17,4 +18,8 @@ export class OrderItem extends CoreEntity {
   @ManyToMany(() => DishOption)
   @JoinTable()
   option: DishOption;
+
+  @Field(() => Int)
+  @Min(1)
+  quantity: number;
 }

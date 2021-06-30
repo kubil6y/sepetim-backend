@@ -32,12 +32,14 @@ export class OrderService {
       const orderItems: OrderItem[] = [];
 
       for (const item of items) {
+        if (item.quantity < 1) return f('Invalid Values');
         // dish check for one item
         const dish = await this.dishRepository.findOne(item.dishId);
         if (!dish) return notFound('dish');
 
         // adding base price
-        finalPrice += dish.basePrice;
+        if (dish.basePrice < 0) return f('Invalid Values');
+        finalPrice += dish.basePrice * item.quantity;
 
         let dishOption: DishOption = null;
         if (item?.dishOptionId) {
@@ -51,7 +53,8 @@ export class OrderService {
           }
 
           // adding extra for dish option
-          finalPrice += dishOption.extra;
+          if (dishOption.extra < 0) return f('Invalid Values');
+          finalPrice += dishOption.extra * item.quantity;
         }
 
         const orderItem = await this.orderItemRepository.save(
@@ -60,6 +63,7 @@ export class OrderService {
             ...(dishOption && { option: dishOption }),
           }),
         );
+
         orderItems.push(orderItem);
       }
 
