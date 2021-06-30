@@ -30,3 +30,13 @@ export const slugify = (str: string, seperator: string = '-'): string => {
     .replace(/-+$/, '') // trim - from end of text
     .replace(/-/g, seperator);
 };
+
+interface OrderRatings {
+  speed: number;
+  taste: number;
+  service: number;
+}
+
+export const ratingValidation = (obj: OrderRatings) => {
+  return Object.values(obj).every((num) => num >= 0 && num <= 10);
+};

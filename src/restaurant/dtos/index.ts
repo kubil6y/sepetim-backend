@@ -1,5 +1,6 @@
 export * from './search-restaurant.dto';
 export * from './restaurants-by-category.dto';
+export * from './restaurant-rating.dto';
 
 export * from './get-restaurant.dto';
 export * from './get-category.dto';

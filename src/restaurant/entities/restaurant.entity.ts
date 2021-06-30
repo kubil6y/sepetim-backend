@@ -4,7 +4,8 @@ import { CoreEntity } from 'src/common/core.entity';
 import { slugify } from 'src/common/helpers';
 import { Dish } from 'src/dish/entities/dish.entity';
 import { Order } from 'src/order/entities/order.entity';
-import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Rating } from 'src/rating/entities/rating.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Category } from './category.entity';
 
 @InputType('RestaurantInputType', { isAbstract: true })
@@ -48,12 +49,16 @@ export class Restaurant extends CoreEntity {
   @OneToMany(() => Order, (order) => order.restaurant)
   orders: Order[];
 
-  //@Field(() => String)
-  //@Column()
-  //slug: string;
-
-  //@BeforeInsert()
-  //generateSlug(): void {
-  //this.slug = slugify(this.name);
-  //}
+  @Field(() => [Rating])
+  @OneToMany(() => Rating, (rating) => rating.restaurant)
+  ratings: Rating[];
 }
+
+//@Field(() => String)
+//@Column()
+//slug: string;
+
+//@BeforeInsert()
+//generateSlug(): void {
+//this.slug = slugify(this.name);
+//}

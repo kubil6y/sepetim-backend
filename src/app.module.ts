@@ -13,6 +13,7 @@ import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { OrderModule } from './order/order.module';
 import { DishModule } from './dish/dish.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { DishModule } from './dish/dish.module';
     SendGridModule.forRoot({
       apikey: process.env.SENDGRID_API_KEY,
     }),
+    RatingModule,
   ],
   controllers: [],
   providers: [],

@@ -8,6 +8,7 @@ import argon2 from 'argon2';
 import { IsEmail, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
 import { Order } from 'src/order/entities/order.entity';
+import { Rating } from 'src/rating/entities/rating.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 
 export enum UserRole {
@@ -62,6 +63,10 @@ export class User extends CoreEntity {
   @Field(() => [Order])
   @OneToMany(() => Order, (order) => order.client)
   orders: Order[];
+
+  @Field(() => [Rating])
+  @OneToMany(() => Rating, (rating) => rating.user)
+  ratings: Rating[];
 
   @BeforeInsert()
   @BeforeUpdate()

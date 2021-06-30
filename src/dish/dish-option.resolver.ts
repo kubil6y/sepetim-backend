@@ -11,8 +11,9 @@ import {
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { DishOptionService } from './dish-option.service';
 import { Role } from 'src/auth/role.decorator';
+import { DishOption } from './entities/dish-option.entity';
 
-@Resolver()
+@Resolver(() => DishOption)
 export class DishOptionResolver {
   constructor(private readonly dishOptionService: DishOptionService) {}
 

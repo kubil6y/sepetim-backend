@@ -54,7 +54,6 @@ export class DishService {
         await this.dishRepository.save(dish);
       }
 
-      console.log(dish);
       return { ok: true };
     } catch (error) {
       return f('Could not create dish');

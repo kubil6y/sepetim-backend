@@ -9,6 +9,7 @@ import {
   GetAllRestaurantsOutput,
   GetRestaurantInput,
   GetRestaurantOutput,
+  RatingsOutput,
   SearchRestaurantInput,
   SearchRestaurantOutput,
 } from './dtos';
@@ -18,12 +19,15 @@ import { RestaurantRepository } from './repositories/restaurant.repository';
 import { CategoryRepository } from './repositories/category.repository';
 import { Category } from './entities/category.entity';
 import { ILike } from 'typeorm';
+import { RatingRepository } from 'src/rating/repositories/rating.repository';
+import { Restaurant } from './entities/restaurant.entity';
 
 @Injectable()
 export class ResturantService {
   constructor(
     private readonly restaurantRepository: RestaurantRepository,
     private readonly categoryRepository: CategoryRepository,
+    private readonly ratingRepository: RatingRepository,
   ) {}
 
   async searchRestaurant({
@@ -48,9 +52,7 @@ export class ResturantService {
   }: GetAllRestaurantsInput): Promise<GetAllRestaurantsOutput> {
     try {
       const { meta, results } = await this.restaurantRepository.paginate({
-        where: {
-          ...(page && { page }),
-        },
+        ...(page && { page }),
         take: 10,
         relations: ['category'],
       });
@@ -70,7 +72,6 @@ export class ResturantService {
         relations: ['category', 'menu', 'menu.options'],
       });
       if (!restaurant) return notFound('restaurant');
-      console.log(restaurant);
 
       return { ok: true, restaurant };
     } catch (error) {
@@ -139,5 +140,20 @@ export class ResturantService {
     } catch (error) {
       return f('Could not delete restaurant');
     }
+  }
+
+  async restaurantRating(restaurant: Restaurant): Promise<RatingsOutput> {
+    const ratings = await this.ratingRepository.find({
+      where: { restaurant: restaurant.id },
+    });
+
+    const len = ratings.length;
+    const result: RatingsOutput = {
+      speed: ratings.reduce((acc, curr) => acc + curr.speed, 0) / len,
+      taste: ratings.reduce((acc, curr) => acc + curr.taste, 0) / len,
+      service: ratings.reduce((acc, curr) => acc + curr.service, 0) / len,
+    };
+
+    return { ...result };
   }
 }

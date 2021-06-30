@@ -1,4 +1,12 @@
 import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
+import {
   CreateRestaurantInput,
   CreateRestaurantOutput,
   DeleteRestaurantInput,
@@ -11,14 +19,21 @@ import {
   GetRestaurantOutput,
   SearchRestaurantInput,
   SearchRestaurantOutput,
+  RatingsOutput,
 } from './dtos';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ResturantService } from './restaurant.service';
 import { Role } from 'src/auth/role.decorator';
+import { Restaurant } from './entities/restaurant.entity';
 
-@Resolver()
+@Resolver(() => Restaurant)
 export class ResturantResolver {
   constructor(private readonly resturantService: ResturantService) {}
+
+  @Role('Public')
+  @ResolveField(() => RatingsOutput)
+  restaurantRating(@Parent() restaurant: Restaurant): Promise<RatingsOutput> {
+    return this.resturantService.restaurantRating(restaurant);
+  }
 
   @Role('Public')
   @Query(() => SearchRestaurantOutput)

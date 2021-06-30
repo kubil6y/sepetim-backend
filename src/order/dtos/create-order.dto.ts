@@ -8,7 +8,7 @@ export class CreateOrderItemInput {
   @Field(() => Int)
   dishId: number;
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   dishOptionId?: number;
 
   @Field(() => Int)

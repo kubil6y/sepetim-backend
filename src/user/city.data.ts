@@ -25,5 +25,3 @@ export const cityData: CityData[] = [
     code: '07',
   },
 ];
-
-console.log(cityData);

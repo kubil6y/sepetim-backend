@@ -6,7 +6,7 @@ import { DishOption } from 'src/dish/entities/dish-option.entity';
 import { Dish } from 'src/dish/entities/dish.entity';
 import { OrderItem } from 'src/order/entities/order-item.entity';
 import { Order } from 'src/order/entities/order.entity';
-import { Rating } from 'src/order/entities/rating.entity';
+import { Rating } from 'src/rating/entities/rating.entity';
 import { Category } from 'src/restaurant/entities/category.entity';
 import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
 import { User } from 'src/user/entities/user.entity';
