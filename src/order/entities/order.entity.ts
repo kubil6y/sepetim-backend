@@ -1,8 +1,40 @@
-import { InputType, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { Min } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
-import { Entity } from 'typeorm';
+import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
+import { User } from 'src/user/entities/user.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  RelationId,
+} from 'typeorm';
+import { OrderItem } from './order-item.entity';
 
 @InputType('OrderInputType', { isAbstract: true })
 @ObjectType()
 @Entity('orders')
-export class Order extends CoreEntity {}
+export class Order extends CoreEntity {
+  @Field(() => Restaurant)
+  @ManyToOne(() => Restaurant, (restaurant) => restaurant.orders)
+  restaurant: Restaurant;
+
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.orders)
+  client: User;
+
+  @RelationId((order: Order) => order.client)
+  clientId: number;
+
+  @Field(() => Number)
+  @Column()
+  @Min(0)
+  total: number;
+
+  @Field(() => [OrderItem])
+  @ManyToMany(() => OrderItem)
+  @JoinTable()
+  items: OrderItem[];
+}

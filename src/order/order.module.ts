@@ -1,14 +1,23 @@
 import { Module } from '@nestjs/common';
-import { Field } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Column } from 'typeorm';
+import { DishOptionRepository } from 'src/dish/repositories/dish-option.repository';
+import { DishRepository } from 'src/dish/repositories/dish.repository';
+import { RestaurantRepository } from 'src/restaurant/repositories/restaurant.repository';
 import { OrderResolver } from './order.resolver';
 import { OrderService } from './order.service';
+import { OrderItemRepository } from './repositories/order-item.repository';
 import { OrderRepository } from './repositories/order.repository';
-import { RatingRepository } from './repositories/rating.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OrderRepository, RatingRepository])],
+  imports: [
+    TypeOrmModule.forFeature([
+      OrderRepository,
+      OrderItemRepository,
+      DishRepository,
+      DishOptionRepository,
+      RestaurantRepository,
+    ]),
+  ],
   providers: [OrderResolver, OrderService],
 })
 export class OrderModule {}

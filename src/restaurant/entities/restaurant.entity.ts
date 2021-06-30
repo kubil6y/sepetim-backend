@@ -3,6 +3,7 @@ import { IsOptional, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
 import { slugify } from 'src/common/helpers';
 import { Dish } from 'src/dish/entities/dish.entity';
+import { Order } from 'src/order/entities/order.entity';
 import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Category } from './category.entity';
 
@@ -42,6 +43,10 @@ export class Restaurant extends CoreEntity {
   @Field(() => [Dish])
   @OneToMany(() => Dish, (dish) => dish.restaurant)
   menu: Dish[];
+
+  @Field(() => [Order])
+  @OneToMany(() => Order, (order) => order.restaurant)
+  orders: Order[];
 
   //@Field(() => String)
   //@Column()
