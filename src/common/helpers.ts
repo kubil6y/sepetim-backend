@@ -38,5 +38,5 @@ interface OrderRatings {
 }
 
 export const ratingValidation = (obj: OrderRatings) => {
-  return Object.values(obj).every((num) => num >= 0 && num <= 10);
+  return Object.values(obj).every((num) => num >= 1 && num <= 10);
 };

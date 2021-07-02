@@ -34,6 +34,7 @@ export class ResturantService {
     query,
   }: SearchRestaurantInput): Promise<SearchRestaurantOutput> {
     try {
+      if (query.length === 0) return f('Please enter a valid query');
       const restaurants = await this.restaurantRepository.find({
         where: {
           name: ILike(`${query}%`),
@@ -148,11 +149,19 @@ export class ResturantService {
     });
 
     const len = ratings.length;
+    if (!len) {
+      return {
+        speed: 0,
+        taste: 0,
+        service: 0,
+      };
+    }
     const result: RatingsOutput = {
       speed: ratings.reduce((acc, curr) => acc + curr.speed, 0) / len,
       taste: ratings.reduce((acc, curr) => acc + curr.taste, 0) / len,
       service: ratings.reduce((acc, curr) => acc + curr.service, 0) / len,
     };
+    console.log({ len, result });
 
     return { ...result };
   }

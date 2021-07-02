@@ -5,7 +5,7 @@ import { slugify } from 'src/common/helpers';
 import { Dish } from 'src/dish/entities/dish.entity';
 import { Order } from 'src/order/entities/order.entity';
 import { Rating } from 'src/rating/entities/rating.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Category } from './category.entity';
 
 @InputType('RestaurantInputType', { isAbstract: true })
@@ -22,17 +22,15 @@ export class Restaurant extends CoreEntity {
   @IsString()
   district: string;
 
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Field(() => String)
+  @Column()
   @IsString()
-  @IsOptional()
-  logoImg?: string;
+  logoImg: string;
 
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Field(() => String)
+  @Column()
   @IsString()
-  @IsOptional()
-  coverImg?: string;
+  coverImg: string;
 
   @Field(() => Category, { nullable: true })
   @ManyToOne(() => Category, (category) => category.restaurants, {
@@ -52,13 +50,13 @@ export class Restaurant extends CoreEntity {
   @Field(() => [Rating])
   @OneToMany(() => Rating, (rating) => rating.restaurant)
   ratings: Rating[];
+
+  @Field(() => String)
+  @Column()
+  slug: string;
+
+  @BeforeInsert()
+  generateSlug(): void {
+    this.slug = slugify(this.name) + '-' + Math.random().toString(36).slice(2);
+  }
 }
-
-//@Field(() => String)
-//@Column()
-//slug: string;
-
-//@BeforeInsert()
-//generateSlug(): void {
-//this.slug = slugify(this.name);
-//}

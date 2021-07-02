@@ -24,36 +24,30 @@ export class AuthGuard implements CanActivate {
     private readonly jwtService: JwtService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    try {
-      const roles = this.reflector.get<AllowedRoles>(
-        METADATAKEY_ROLES,
-        context.getHandler(),
-      );
+    const roles = this.reflector.get<AllowedRoles>(
+      METADATAKEY_ROLES,
+      context.getHandler(),
+    );
 
-      if (!roles || roles.length === 0) return false; // all endpoints must have @Role() decorator
-      if (roles.includes('Public')) return true; // public endpoints
+    if (!roles || roles.length === 0) return false; // all endpoints must have @Role() decorator
+    if (roles.includes('Public')) return true; // public endpoints
 
-      const gqlContext = GqlExecutionContext.create(context).getContext();
-      const token = gqlContext.token;
+    const gqlContext = GqlExecutionContext.create(context).getContext();
+    const token = gqlContext.token;
 
-      if (token) {
-        const decoded = this.jwtService.verify(token);
-        if (typeof decoded === 'object' && decoded.hasOwnProperty('id')) {
-          const { ok, user } = await this.userService.findUserById(
-            decoded['id'],
-          );
-          if (ok && user) {
-            gqlContext['user'] = user; // adding user to context.
-            if (roles.includes('All')) return true; // any logged in user
-            if (user.role === UserRole.Admin) return true; // Admin has all the access
-            return roles.includes(user.role); // only certain users
-          }
+    if (token) {
+      const decoded = this.jwtService.verify(token);
+      if (typeof decoded === 'object' && decoded.hasOwnProperty('id')) {
+        const { ok, user } = await this.userService.findUserById(decoded['id']);
+        if (ok && user) {
+          gqlContext['user'] = user; // adding user to context.
+          if (roles.includes('All')) return true; // any logged in user
+          if (user.role === UserRole.Admin) return true; // Admin has all the access
+          return roles.includes(user.role); // only certain users
         }
       }
-
-      return false;
-    } catch (error) {
-      return false;
     }
+
+    return false;
   }
 }

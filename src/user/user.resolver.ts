@@ -21,9 +21,9 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Role('All')
-  @Query(() => UserOutput)
-  me(@CurrentUser() user: User): UserOutput {
-    return { ok: true, user };
+  @Query(() => User)
+  me(@CurrentUser() user: User): User {
+    return user;
   }
 
   @Role('All')

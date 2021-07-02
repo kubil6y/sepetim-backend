@@ -20,6 +20,7 @@ export class RatingService {
     { restaurantId, orderId, speed, taste, service }: RateOrderInput,
   ): Promise<RateOrderOutput> {
     try {
+      // min 1, max 10 rating!
       if (!ratingValidation({ speed, taste, service })) {
         return f('Invalid ratings');
       }
@@ -31,7 +32,6 @@ export class RatingService {
 
       const restaurant = await this.restaurantRepository.findOne(restaurantId);
       if (!restaurant) return notFound('restaurant');
-      console.log(restaurant);
 
       const order = await this.orderRepository.findOne(orderId);
       if (!order) return notFound('order');
