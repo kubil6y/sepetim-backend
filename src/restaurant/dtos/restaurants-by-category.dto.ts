@@ -6,7 +6,7 @@ import { Restaurant } from '../entities/restaurant.entity';
 @InputType()
 export class RestaurantsByCategoryInput {
   @Field(() => String)
-  categoryName: string;
+  slug: string;
 }
 
 @ObjectType()

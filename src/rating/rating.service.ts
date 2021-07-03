@@ -1,4 +1,4 @@
-import { RateOrderInput, RateOrderOutput } from './dtos';
+import { RateOrderInput, RateOrderOutput, Top5RestaurantsOutput } from './dtos';
 import { f, notFound } from 'src/common/errors';
 import { Injectable } from '@nestjs/common';
 import { RatingRepository } from './repositories/rating.repository';
@@ -53,6 +53,22 @@ export class RatingService {
       return { ok: true };
     } catch (error) {
       return f('Could not rate');
+    }
+  }
+
+  async getTopFiveRestaurants(): Promise<Top5RestaurantsOutput> {
+    try {
+      const ratings = await this.ratingRepository.find({
+        take: 5,
+        order: {
+          taste: 'DESC',
+        },
+        relations: ['restaurant'],
+      });
+
+      return { ok: true, ratings };
+    } catch (error) {
+      return f('Could not get restaurants');
     }
   }
 }

@@ -161,7 +161,6 @@ export class ResturantService {
       taste: ratings.reduce((acc, curr) => acc + curr.taste, 0) / len,
       service: ratings.reduce((acc, curr) => acc + curr.service, 0) / len,
     };
-    console.log({ len, result });
 
     return { ...result };
   }

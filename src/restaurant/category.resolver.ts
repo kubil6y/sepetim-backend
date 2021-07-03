@@ -5,7 +5,6 @@ import {
   DeleteCategoryOutput,
   EditCategoryInput,
   EditCategoryOutput,
-  GetAllCategoriesInput,
   GetAllCategoriesOutput,
   GetCategoryInput,
   GetCategoryOutput,
@@ -31,10 +30,8 @@ export class CategoryResolver {
 
   @Role('Public')
   @Query(() => GetAllCategoriesOutput)
-  getAllCategories(
-    @Args('input') getAllCategoriesInput: GetAllCategoriesInput,
-  ): Promise<GetAllCategoriesOutput> {
-    return this.categoryService.getAllCategories(getAllCategoriesInput);
+  getAllCategories(): Promise<GetAllCategoriesOutput> {
+    return this.categoryService.getAllCategories();
   }
 
   @Role('Public')

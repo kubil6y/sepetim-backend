@@ -20,12 +20,12 @@ export class Category extends CoreEntity {
   @OneToMany(() => Restaurant, (restaurant) => restaurant.category)
   restaurants: Restaurant[];
 
-  //@Field(() => String)
-  //@Column()
-  //slug: string;
+  @Field(() => String)
+  @Column()
+  slug: string;
 
-  //@BeforeInsert()
-  //generateSlug(): void {
-  //this.slug = slugify(this.name);
-  //}
+  @BeforeInsert()
+  generateSlug(): void {
+    this.slug = slugify(this.name.toLowerCase());
+  }
 }

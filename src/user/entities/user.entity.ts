@@ -5,7 +5,7 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import argon2 from 'argon2';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString, Min, MinLength } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
 import { Order } from 'src/order/entities/order.entity';
 import { Rating } from 'src/rating/entities/rating.entity';
@@ -54,6 +54,7 @@ export class User extends CoreEntity {
   @Field(() => String)
   @Column({ select: false })
   @IsString()
+  @MinLength(6)
   password: string;
 
   @Field(() => UserRole, { nullable: true, defaultValue: UserRole.Client })

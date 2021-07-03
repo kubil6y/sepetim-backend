@@ -5,7 +5,6 @@ import {
   DeleteCategoryOutput,
   EditCategoryInput,
   EditCategoryOutput,
-  GetAllCategoriesInput,
   GetAllCategoriesOutput,
   GetCategoryInput,
   GetCategoryOutput,
@@ -28,6 +27,11 @@ export class CategoryService {
     createCategoryInput: CreateCategoryInput,
   ): Promise<CreateCategoryOutput> {
     try {
+      const category = await this.categoryRepository.findOne({
+        name: createCategoryInput.name.toLowerCase(),
+      });
+      if (category) return f('Category already exists');
+
       await this.categoryRepository.save(
         this.categoryRepository.create({
           ...createCategoryInput,
@@ -77,12 +81,10 @@ export class CategoryService {
   }
 
   async restaurantsByCategory({
-    categoryName,
+    slug,
   }: RestaurantsByCategoryInput): Promise<RestaurantsByCategoryOutput> {
     try {
-      const category = await this.categoryRepository.findOne({
-        name: categoryName.toLowerCase(),
-      });
+      const category = await this.categoryRepository.findOne({ slug });
       if (!category) return notFound('category');
 
       const { meta, results } = await this.restaurantRepository.paginate({
@@ -96,11 +98,11 @@ export class CategoryService {
     }
   }
 
-  async getCategory({
-    categoryId,
-  }: GetCategoryInput): Promise<GetCategoryOutput> {
+  async getCategory({ slug }: GetCategoryInput): Promise<GetCategoryOutput> {
     try {
-      const category = await this.categoryRepository.findOne(categoryId);
+      const category = await this.categoryRepository.findOne({
+        where: { slug },
+      });
       if (!category) return notFound('category');
 
       return { ok: true, category };
@@ -109,15 +111,11 @@ export class CategoryService {
     }
   }
 
-  async getAllCategories({
-    page,
-  }: GetAllCategoriesInput): Promise<GetAllCategoriesOutput> {
+  async getAllCategories(): Promise<GetAllCategoriesOutput> {
     try {
-      const { meta, results } = await this.categoryRepository.paginate({
-        ...(page && { page }),
-      });
+      const categories = await this.categoryRepository.find();
 
-      return { ok: true, meta, results };
+      return { ok: true, categories };
     } catch (error) {
       return f('Could not load categories');
     }
