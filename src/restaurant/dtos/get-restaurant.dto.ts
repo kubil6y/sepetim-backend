@@ -1,11 +1,11 @@
-import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from 'src/common/core.output';
 import { Restaurant } from '../entities/restaurant.entity';
 
 @InputType()
 export class GetRestaurantInput {
-  @Field(() => Int)
-  restaurantId: number;
+  @Field(() => String)
+  slug: number;
 }
 
 @ObjectType()

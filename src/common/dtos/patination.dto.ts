@@ -1,9 +1,11 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { Min } from 'class-validator';
 import { CoreOutput } from '../core.output';
 
 @InputType()
 export class PaginationInput {
   @Field(() => Int, { nullable: true, defaultValue: 1 })
+  @Min(1)
   page?: number;
 }
 

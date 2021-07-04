@@ -82,6 +82,7 @@ export class CategoryService {
 
   async restaurantsByCategory({
     slug,
+    page,
   }: RestaurantsByCategoryInput): Promise<RestaurantsByCategoryOutput> {
     try {
       const category = await this.categoryRepository.findOne({ slug });
@@ -89,7 +90,8 @@ export class CategoryService {
 
       const { meta, results } = await this.restaurantRepository.paginate({
         where: { category },
-        take: 10,
+        take: 5,
+        ...(page && { page }),
       });
 
       return { ok: true, meta, results, category };
