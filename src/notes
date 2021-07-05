@@ -10,3 +10,14 @@
 }
 
 #----------------------------------------#
+### TYPEORM FLOAT CLASHES! ###
+# https://github.com/typeorm/typeorm/issues/2812
+
+# this shit is terrible. js has one type for numbers but postgres has many. so there is a clash. seems like there is a work around like this:
+
+@Column({type: 'real'})
+basePrice: string;
+
+# with a solution like this, will class-validator work? anyways atm basePrice is a float but extra dish prices are int. cba fixing the rest.
+
+#----------------------------------------#

@@ -56,6 +56,7 @@ export class DishService {
 
       return { ok: true };
     } catch (error) {
+      console.log(error);
       return f('Could not create dish');
     }
   }

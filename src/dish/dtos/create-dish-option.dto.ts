@@ -6,6 +6,7 @@ import { DishOption } from '../entities/dish-option.entity';
 export class CreateDishOptionInput extends PickType(DishOption, [
   'name',
   'extra',
+  'calorie',
 ]) {
   @Field(() => Int)
   dishId: number;

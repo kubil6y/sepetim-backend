@@ -35,6 +35,15 @@ export class Order extends CoreEntity {
   @Min(0)
   total: number;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  rated: boolean;
+
+  @Field(() => Number)
+  @Column()
+  @Min(0)
+  totalCalories: number;
+
   @Field(() => [OrderItem])
   @ManyToMany(() => OrderItem)
   @JoinTable()

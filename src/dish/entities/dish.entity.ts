@@ -1,23 +1,9 @@
-import {
-  Field,
-  Float,
-  InputType,
-  ObjectType,
-  registerEnumType,
-} from '@nestjs/graphql';
+import { Field, Float, InputType, ObjectType } from '@nestjs/graphql';
 import { Min } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
 import { Restaurant } from 'src/restaurant/entities/restaurant.entity';
 import { Column, Entity, ManyToOne, OneToMany, RelationId } from 'typeorm';
 import { DishOption } from './dish-option.entity';
-
-enum DishType {
-  Food = 'Food',
-  Beverage = 'Beverage',
-  Dessert = 'Dessert',
-}
-
-registerEnumType(DishType, { name: 'DishTypeEnum' });
 
 @InputType('DishInputType', { isAbstract: true })
 @ObjectType()
@@ -27,14 +13,20 @@ export class Dish extends CoreEntity {
   @Column()
   name: string;
 
-  @Field(() => String, { nullable: true })
-  @Column({ nullable: true })
-  description?: string;
+  @Field(() => String)
+  @Column()
+  image: string;
 
   @Field(() => Float)
   @Column()
+  calorie: number;
+
+  // TODO typeorm postgres clashes with float! kinda shit
+  // github issue: https://github.com/typeorm/typeorm/issues/2812
+  @Field(() => Float)
+  @Column({ type: 'real' })
   @Min(0)
-  basePrice: number;
+  basePrice: string;
 
   @Field(() => [DishOption], { nullable: true })
   @OneToMany(() => DishOption, (dishOption) => dishOption.dish)
@@ -45,8 +37,4 @@ export class Dish extends CoreEntity {
 
   @RelationId((dish: Dish) => dish.restaurant)
   restaurantId: number;
-
-  @Field(() => DishType, { nullable: true, defaultValue: DishType.Food })
-  @Column({ enum: DishType, default: DishType.Food })
-  dishType: DishType;
 }

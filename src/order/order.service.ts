@@ -1,4 +1,9 @@
-import { CreateOrderInput, CreateOrderOutput } from './dtos';
+import {
+  CreateOrderInput,
+  CreateOrderOutput,
+  GetMyOrdersInput,
+  GetMyOrdersOutput,
+} from './dtos';
 import { f, notFound } from 'src/common/errors';
 import { Injectable } from '@nestjs/common';
 import { DishOptionRepository } from 'src/dish/repositories/dish-option.repository';
@@ -28,6 +33,7 @@ export class OrderService {
       const restaurant = await this.restaurantRepository.findOne(restaurantId);
       if (!restaurant) return notFound('restaurant');
 
+      let totalCalories = 0;
       let finalPrice: number = 0;
       const orderItems: OrderItem[] = [];
 
@@ -38,8 +44,9 @@ export class OrderService {
         if (!dish) return notFound('dish');
 
         // adding base price
-        if (dish.basePrice < 0) return f('Invalid Values');
-        finalPrice += dish.basePrice * item.quantity;
+        if (+dish.basePrice < 0) return f('Invalid Values');
+        finalPrice += +dish.basePrice * item.quantity;
+        totalCalories += dish.calorie * item.quantity;
 
         let dishOption: DishOption = null;
         if (item?.dishOptionId) {
@@ -55,6 +62,7 @@ export class OrderService {
           // adding extra for dish option
           if (dishOption.extra < 0) return f('Invalid Values');
           finalPrice += dishOption.extra * item.quantity;
+          totalCalories += dishOption.calorie * item.quantity;
         }
 
         const orderItem = await this.orderItemRepository.save(
@@ -73,12 +81,32 @@ export class OrderService {
           total: finalPrice,
           client,
           restaurant,
+          totalCalories,
         }),
       );
 
       return { ok: true, orderId: order.id };
     } catch (error) {
       return f('Could not create order');
+    }
+  }
+
+  async getMyOrders(
+    user: User,
+    { page }: GetMyOrdersInput,
+  ): Promise<GetMyOrdersOutput> {
+    try {
+      const { meta, results } = await this.orderRepository.paginate({
+        where: { client: user },
+        take: 5,
+        ...(page && { page }),
+        relations: ['items', 'items.dish', 'client'],
+      });
+
+      return { ok: true, meta, results };
+    } catch (error) {
+      console.log(error);
+      return f('COuld not load your orders');
     }
   }
 }

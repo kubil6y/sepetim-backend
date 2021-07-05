@@ -38,8 +38,9 @@ export class RatingService {
 
       if (order.clientId !== client.id) return f('This is not your order');
 
+      order.rated = true;
       // rating
-      await this.ratingRepository.save(
+      const p1 = this.ratingRepository.save(
         this.ratingRepository.create({
           user: client,
           order,
@@ -49,6 +50,9 @@ export class RatingService {
           service,
         }),
       );
+
+      const p2 = this.orderRepository.save(order);
+      await Promise.all([p1, p2]);
 
       return { ok: true };
     } catch (error) {

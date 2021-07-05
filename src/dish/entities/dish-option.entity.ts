@@ -1,4 +1,4 @@
-import { InputType, ObjectType, Field, Float } from '@nestjs/graphql';
+import { InputType, ObjectType, Field, Float, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
 import { CoreEntity } from 'src/common/core.entity';
 import { Entity, Column, ManyToOne, RelationId } from 'typeorm';
@@ -16,6 +16,11 @@ export class DishOption extends CoreEntity {
   @Column()
   @Min(0)
   extra: number;
+
+  @Field(() => Int)
+  @Column()
+  @Min(0)
+  calorie: number;
 
   @Field(() => Dish)
   @ManyToOne(() => Dish, { onDelete: 'CASCADE' })
