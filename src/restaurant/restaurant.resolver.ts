@@ -20,6 +20,7 @@ import {
   SearchRestaurantInput,
   SearchRestaurantOutput,
   RatingsOutput,
+  GetFiveOutput,
 } from './dtos';
 import { ResturantService } from './restaurant.service';
 import { Role } from 'src/auth/role.decorator';
@@ -41,6 +42,12 @@ export class ResturantResolver {
     @Args('input') searchRestaurantInput: SearchRestaurantInput,
   ): Promise<SearchRestaurantOutput> {
     return this.resturantService.searchRestaurant(searchRestaurantInput);
+  }
+
+  @Role('Public')
+  @Query(() => GetFiveOutput)
+  getFiveRestaurants(): Promise<GetFiveOutput> {
+    return this.resturantService.getFiveRestaurants();
   }
 
   @Role('Public')

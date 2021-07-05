@@ -100,13 +100,12 @@ export class OrderService {
         where: { client: user },
         take: 5,
         ...(page && { page }),
-        relations: ['items', 'items.dish', 'client'],
+        relations: ['restaurant', 'restaurant.category'],
       });
 
       return { ok: true, meta, results };
     } catch (error) {
-      console.log(error);
-      return f('COuld not load your orders');
+      return f('Could not load your orders');
     }
   }
 }

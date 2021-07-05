@@ -7,6 +7,7 @@ import {
   EditRestaurantOutput,
   GetAllRestaurantsInput,
   GetAllRestaurantsOutput,
+  GetFiveOutput,
   GetRestaurantInput,
   GetRestaurantOutput,
   RatingsOutput,
@@ -164,5 +165,14 @@ export class ResturantService {
     };
 
     return { ...result };
+  }
+
+  async getFiveRestaurants(): Promise<GetFiveOutput> {
+    try {
+      const restaurants = await this.restaurantRepository.find({ take: 5 });
+      return { ok: true, restaurants };
+    } catch (error) {
+      return f('Could not get restaurants');
+    }
   }
 }
