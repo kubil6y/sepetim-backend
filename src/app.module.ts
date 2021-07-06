@@ -31,7 +31,7 @@ import { Verification } from './user/entities/verification.entity';
       envFilePath: __dev__ ? '.env.dev' : '.env.test',
       ignoreEnvFile: __prod__,
       validationSchema: Joi.object({
-        NODE_ENV: Joi.valid('production', 'development', 'test'),
+        NODE_ENV: Joi.valid('production', 'development', 'test').required(),
         DB_HOST: Joi.string(),
         DB_PORT: Joi.string(),
         DB_USERNAME: Joi.string(),
