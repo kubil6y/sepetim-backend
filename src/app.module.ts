@@ -80,7 +80,7 @@ import { Verification } from './user/entities/verification.entity';
         Dish,
         DishOption,
       ],
-      synchronize: __dev__,
+      synchronize: true,
       logging: true,
       ssl: {
         rejectUnauthorized: false,
