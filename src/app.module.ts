@@ -43,7 +43,7 @@ import { Verification } from './user/entities/verification.entity';
     }),
     GraphQLModule.forRoot({
       introspection: true,
-      playground: true,
+      playground: !__prod__,
       context: ({ req }) => ({
         token: req.headers[TOKEN_KEY],
       }),
@@ -80,8 +80,8 @@ import { Verification } from './user/entities/verification.entity';
         Dish,
         DishOption,
       ],
-      synchronize: true,
-      logging: true,
+      synchronize: !__prod__,
+      logging: !__prod__,
       ssl: {
         rejectUnauthorized: false,
       },
