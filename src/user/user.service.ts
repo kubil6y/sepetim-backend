@@ -54,12 +54,12 @@ export class UserService {
       );
 
       // TODO activate later
-      //await this.mailService.send({
-      //to: user.email,
-      //from: 'lieqb2@gmail.com',
-      //subject: '[Sepetim] Account Activation Code',
-      //text: `Activation code: ${verification.code}`,
-      //});
+      await this.mailService.send({
+        to: user.email,
+        from: 'lieqb2@gmail.com',
+        subject: '[Sepetim] Account Activation Code',
+        text: `Activation code: ${verification.code}`,
+      });
 
       return { ok: true, user };
     } catch (error) {
