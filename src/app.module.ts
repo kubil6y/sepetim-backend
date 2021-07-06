@@ -6,7 +6,6 @@ import { TOKEN_KEY, __dev__, __prod__ } from './common/constants';
 import { GraphQLModule } from '@nestjs/graphql';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { DatabaseModule } from './database/database.module';
 import { JwtModule } from './jwt/jwt.module';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
@@ -14,6 +13,16 @@ import { RestaurantModule } from './restaurant/restaurant.module';
 import { OrderModule } from './order/order.module';
 import { DishModule } from './dish/dish.module';
 import { RatingModule } from './rating/rating.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DishOption } from './dish/entities/dish-option.entity';
+import { Dish } from './dish/entities/dish.entity';
+import { OrderItem } from './order/entities/order-item.entity';
+import { Order } from './order/entities/order.entity';
+import { Rating } from './rating/entities/rating.entity';
+import { Category } from './restaurant/entities/category.entity';
+import { Restaurant } from './restaurant/entities/restaurant.entity';
+import { User } from './user/entities/user.entity';
+import { Verification } from './user/entities/verification.entity';
 
 @Module({
   imports: [
@@ -23,11 +32,11 @@ import { RatingModule } from './rating/rating.module';
       ignoreEnvFile: __prod__,
       validationSchema: Joi.object({
         NODE_ENV: Joi.valid('production', 'development', 'test'),
-        DB_HOST: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
-        DB_USERNAME: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
-        DB_DATABASE: Joi.string().required(),
+        DB_HOST: Joi.string(),
+        DB_PORT: Joi.string(),
+        DB_USERNAME: Joi.string(),
+        DB_PASSWORD: Joi.string(),
+        DB_DATABASE: Joi.string(),
         JWT_SECRET_KEY: Joi.string().required(),
         SENDGRID_API_KEY: Joi.string().required(),
       }),
@@ -46,7 +55,33 @@ import { RatingModule } from './rating/rating.module';
         return graphQLFormattedError;
       },
     }),
-    DatabaseModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      ...(process.env.DATABASE_URL
+        ? {
+            url: process.env.DATABASE_URL,
+          }
+        : {
+            host: process.env.DB_HOST,
+            port: +process.env.DB_PORT,
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE,
+          }),
+      entities: [
+        User,
+        Verification,
+        Restaurant,
+        Category,
+        Rating,
+        Order,
+        OrderItem,
+        Dish,
+        DishOption,
+      ],
+      synchronize: __dev__,
+      logging: true,
+    }),
     CommonModule,
     AuthModule,
     UserModule,
