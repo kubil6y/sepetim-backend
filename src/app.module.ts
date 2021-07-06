@@ -42,6 +42,7 @@ import { Verification } from './user/entities/verification.entity';
       }),
     }),
     GraphQLModule.forRoot({
+      introspection: true,
       playground: true,
       context: ({ req }) => ({
         token: req.headers[TOKEN_KEY],
