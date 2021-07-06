@@ -81,6 +81,9 @@ import { Verification } from './user/entities/verification.entity';
       ],
       synchronize: __dev__,
       logging: true,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
     CommonModule,
     AuthModule,
