@@ -33,7 +33,7 @@ import { RatingModule } from './rating/rating.module';
       }),
     }),
     GraphQLModule.forRoot({
-      playground: __dev__,
+      playground: true,
       context: ({ req }) => ({
         token: req.headers[TOKEN_KEY],
       }),
