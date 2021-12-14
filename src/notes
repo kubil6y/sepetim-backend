@@ -1,14 +1,3 @@
-### TOKENS ###
-# ADMIN
-{
-  "x-jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjI1MzA2MzE4fQ.XUOfXPl6ov0dV3QNotnZVOtGQg1skdUYxYG8u4EVdmA"
-}
-
-# CLIENT
-{
-  "x-jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjI0ODg1MzQyfQ.tUUCtleWriNJtRAWec2_8U4_ESc0AOhS4g4MD4x2Xms"
-}
-
 #----------------------------------------#
 ### TYPEORM FLOAT CLASHES! ###
 # https://github.com/typeorm/typeorm/issues/2812
